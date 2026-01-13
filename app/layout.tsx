@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`flex min-h-full flex-col bg-white ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <main className="grow container mx-auto px-4 py-20">{children}</main>
+        <main className="grow container mx-auto px-6 py-20 md:px-20">{children}</main>
       </body>
     </html>
   );

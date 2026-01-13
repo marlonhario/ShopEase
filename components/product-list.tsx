@@ -43,15 +43,17 @@ export const ProductList = ({ products }: Props) => {
         />
       </div>
 
-      <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 place-items-center">
-        {filteredProduct.map((product) => {
-          return (
-            <li key={product.id}>
-              <ProductCard product={product} />
-            </li>
-          );
-        })}
-      </ul>
+      <div className="mx-auto">
+        <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 gap-18 ">
+          {filteredProduct.map((product) => {
+            return (
+              <li key={product.id}>
+                <ProductCard product={product} />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };

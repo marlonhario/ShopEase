@@ -56,6 +56,7 @@ export const Carousel = ({ products }: Props) => {
                     src={slide.image}
                     alt={slide.name}
                     fill
+                    priority
                     className="object-contain"
                   />
                 </div>

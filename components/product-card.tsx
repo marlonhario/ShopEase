@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useCartStore } from "@/store/cart-store";
 
 interface Props {
   product: {
@@ -31,11 +32,29 @@ interface Props {
 
 export const ProductCard = ({ product }: Props) => {
   const [liked, setLiked] = useState<boolean>(false);
+  const { items, addItem, removeItem } = useCartStore();
+
+  const onAddItem = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+    });
+  };
 
   return (
-    <div className="relative max-w-md min-w-md rounded-xl bg-gradient-to-r from-neutral-600 to-violet-300 pt-0 shadow-lg">
+    <div className="relative max-w-md  rounded-xl bg-gradient-to-r from-neutral-600 to-violet-300 pt-0 shadow-lg">
       <div className="flex h-60 items-center justify-center">
-        <img alt={product.name} src={product.image} className="w-75" />
+        <Image
+          alt={product.name}
+          src={product.image}
+          priority
+          height={300}
+          width={300}
+          className="object-contain"
+        />
       </div>
       <Button
         size="icon"
@@ -51,7 +70,12 @@ export const ProductCard = ({ product }: Props) => {
       </Button>
       <Card className="border-none">
         <CardHeader>
-          <CardTitle>{product.name}</CardTitle>
+          <Link
+            href={`/products/${product.id}`}
+            className="cursor-pointer hover:text-indigo-600"
+          >
+            <CardTitle>{product.name}</CardTitle>
+          </Link>
           <CardDescription className="flex items-center gap-2">
             <Badge variant="outline" className="rounded-sm">
               {product.size}
@@ -69,11 +93,14 @@ export const ProductCard = ({ product }: Props) => {
             <span className="text-sm font-medium uppercase">Price</span>
             <span className="text-xl font-semibold">${product.price}</span>
           </div>
-          <Link href={`/products/${product.id}`}>
-            <Button variant={"default"} className="bg-gray-500" size="lg">
-              Add to cart
-            </Button>
-          </Link>
+          <Button
+            onClick={onAddItem}
+            variant={"default"}
+            className="bg-gray-500"
+            size="lg"
+          >
+            Add to cart
+          </Button>
         </CardFooter>
       </Card>
     </div>

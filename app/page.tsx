@@ -74,6 +74,8 @@ export default function Home() {
               src="/tennis-shoes.png" // Replace with your image
               alt="Shopping Hero"
               fill
+              priority
+              sizes="100vw"
               className="object-contain"
             />
           </div>

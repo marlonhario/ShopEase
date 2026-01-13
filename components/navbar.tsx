@@ -41,8 +41,8 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <header className="bg-white shadow-md fixed w-full z-50">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <header className="bg-white shadow-md fixed w-full z-50 px-6 md:px-20">
+      <div className="container mx-auto py-4 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           {/* Gradient Text Logo with drop shadow */}
