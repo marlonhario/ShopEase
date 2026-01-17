@@ -119,160 +119,87 @@
 //   );
 // }
 
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
+import * as React from "react";
+import { PlusIcon, MinusIcon, Trash2Icon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent } from "@/components/ui/card";
-import { Minus, Plus } from "lucide-react";
-
-// Stripe client
-const stripePromise: Promise<Stripe | null> = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number; // cents
-  image: string;
-  quantity: number;
-  selected: boolean;
-}
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "@/components/ui/item";
+import { Badge } from "@/components/ui/badge";
+const people = [
+  {
+    username: "shadcn",
+    avatar: "https://github.com/shadcn.png",
+    email: "shadcn@vercel.com",
+  },
+  {
+    username: "maxleiter",
+    avatar: "https://github.com/maxleiter.png",
+    email: "maxleiter@vercel.com",
+  },
+  {
+    username: "evilrabbit",
+    avatar: "https://github.com/evilrabbit.png",
+    email: "evilrabbit@vercel.com",
+  },
+];
 
 export default function CartCheckout() {
-  const [cart, setCart] = useState<CartItem[]>([
-    {
-      id: "1",
-      name: "Product One",
-      price: 2500,
-      image: "/product1.png",
-      quantity: 1,
-      selected: true,
-    },
-    {
-      id: "2",
-      name: "Product Two",
-      price: 4000,
-      image: "/product2.png",
-      quantity: 2,
-      selected: false,
-    },
-  ]);
-
-  const updateQuantity = (id: string, type: "inc" | "dec") => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity:
-                type === "inc"
-                  ? item.quantity + 1
-                  : Math.max(1, item.quantity - 1),
-            }
-          : item
-      )
-    );
-  };
-
-  const toggleSelect = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, selected: !item.selected } : item
-      )
-    );
-  };
-
-  const totalQuantity = cart
-    .filter((i) => i.selected)
-    .reduce((sum, item) => sum + item.quantity, 0);
-
-  const totalAmount = cart
-    .filter((i) => i.selected)
-    .reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  const checkout = async () => {
-    const stripe = await stripePromise;
-
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        items: cart.filter((i) => i.selected),
-      }),
-    });
-
-    const session = await res.json();
-    await stripe?.redirectToCheckout({ sessionId: session.id });
-  };
-
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Shopping Cart</h1>
-
-      {cart.map((item) => (
-        <Card key={item.id} className="flex items-center gap-4 p-4">
-          <Checkbox
-            checked={item.selected}
-            onCheckedChange={() => toggleSelect(item.id)}
-          />
-
-          <Image
-            src={item.image}
-            alt={item.name}
-            width={80}
-            height={80}
-            className="rounded-md"
-          />
-
-          <CardContent className="flex-1 p-0">
-            <p className="font-medium">{item.name}</p>
-            <p className="text-sm text-muted-foreground">
-              ${(item.price / 100).toFixed(2)}
-            </p>
-          </CardContent>
-
-          <div className="flex items-center gap-2">
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={() => updateQuantity(item.id, "dec")}
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <span className="w-6 text-center">{item.quantity}</span>
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={() => updateQuantity(item.id, "inc")}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-        </Card>
-      ))}
-
-      <Card className="p-4">
-        <div className="flex justify-between mb-2">
-          <span>Total Quantity</span>
-          <span>{totalQuantity}</span>
-        </div>
-        <div className="flex justify-between font-semibold">
-          <span>Total Amount</span>
-          <span>${(totalAmount / 100).toFixed(2)}</span>
-        </div>
-        <Button
-          className="w-full mt-4"
-          disabled={totalAmount === 0}
-          onClick={checkout}
-        >
-          Checkout with Stripe
+    <div className="flex w-full justify-center items-center  flex-col gap-6 m-auto">
+      <ItemGroup className="min-w-sx  md:min-w-2xl">
+        {people.map((person, index) => (
+          <React.Fragment key={person.username}>
+            <Item>
+              <ItemMedia
+                variant={"image"}
+                className="h-14 w-14 flex items-center justify-center"
+              >
+                <Avatar className="h-14 w-14 rounded-lg">
+                  <AvatarImage src={person.avatar} className="grayscale" />
+                  <AvatarFallback>{person.username.charAt(0)}</AvatarFallback>
+                </Avatar>
+              </ItemMedia>
+              <ItemContent className="gap-1">
+                <ItemTitle>{person.username}</ItemTitle>
+                <ItemDescription>{person.email}</ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <MinusIcon />
+                </Button>
+                <Badge variant="secondary">20</Badge>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <PlusIcon />
+                </Button>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Trash2Icon />
+                </Button>
+              </ItemActions>
+            </Item>
+            {index !== people.length - 1 && <ItemSeparator />}
+          </React.Fragment>
+        ))}
+      </ItemGroup>
+      <div className="flex items-end justify-end min-w-sx  md:min-w-2xl">
+        <Button variant="outline">
+          <Badge className="rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
+            26 item/s
+          </Badge>
+          <span className="md:mx-4">Place Order</span>
+          <Badge className="rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
+            TOTAL: $59.67
+          </Badge>
         </Button>
-      </Card>
+      </div>
     </div>
   );
 }
