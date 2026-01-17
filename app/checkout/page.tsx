@@ -189,15 +189,18 @@ export default function CartCheckout() {
           </React.Fragment>
         ))}
       </ItemGroup>
-      <div className="flex items-end justify-end min-w-sx  md:min-w-2xl">
-        <Button variant="outline">
-          <Badge className="rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
-            26 item/s
-          </Badge>
-          <span className="md:mx-4">Place Order</span>
-          <Badge className="rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
-            TOTAL: $59.67
-          </Badge>
+      <div className="flex items-center justify-end min-w-sx  md:min-w-2xl">
+        <Badge className="rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
+          26 item/s
+        </Badge>
+        <Badge className="mx-2 rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
+          TOTAL: $59.67
+        </Badge>
+        <Button
+          variant="destructive"
+          className="h-7 px-2 py-1 text-xs ring-offset-background hover:ring-red-600/90 transition-all duration-300 hover:ring-2 hover:ring-offset-2"
+        >
+          Place Order
         </Button>
       </div>
     </div>
