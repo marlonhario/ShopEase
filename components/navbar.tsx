@@ -66,7 +66,7 @@ export const Navbar = () => {
                     "absolute left-0 -bottom-1 h-[2px] w-full bg-indigo-600 transition-all duration-300",
                     pathname === path.path
                       ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100",
                   )}
                 />
               </Link>
@@ -84,17 +84,31 @@ export const Navbar = () => {
           </Button>
         </nav>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 text-gray-700"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
+        <div className="md:hidden">
+          {/* Cart */}
+          {!mobileMenuOpen && (
+            <Button variant="ghost" className="relative p-2 mr-3">
+              <ShoppingCart className="w-6 h-6 text-gray-700" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Button>
           )}
-        </button>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="p-2 text-gray-700"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
