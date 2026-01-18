@@ -32,7 +32,7 @@ interface Props {
 
 export const ProductCard = ({ product }: Props) => {
   const [liked, setLiked] = useState<boolean>(false);
-  const { items, addItem, removeItem } = useCartStore();
+  const { items, addItem, decreaseItem } = useCartStore();
 
   const onAddItem = () => {
     addItem({

@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function ProductDetail({ product }: Props) {
-  const { items, addItem, removeItem } = useCartStore();
+  const { items, addItem, decreaseItem } = useCartStore();
   const cartItem = items.find((item) => item.id === product.id);
   const quantity = cartItem ? cartItem.quantity : 0;
 
@@ -53,7 +53,7 @@ export default function ProductDetail({ product }: Props) {
         </p>
 
         <div className="flex items-center space-x-4">
-          <Button onClick={() => removeItem(product.id)} variant={"outline"}>-</Button>
+          <Button onClick={() => decreaseItem(product.id)} variant={"outline"}>-</Button>
           <span className="text-lg font-semibold">{quantity}</span>
           <Button onClick={onAddItem}>+</Button>
         </div>

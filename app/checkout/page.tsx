@@ -7,7 +7,7 @@
 // // import { checkoutAction } from "./checkout.action";
 
 // export default function CheckoutPage() {
-//   const { items, removeItem, addItem, clearCart } = useCartStore();
+//   const { items, decreaseItem, addItem, clearCart } = useCartStore();
 //   const router = useRouter();
 //   const [url, setUrl] = useState(null);
 
@@ -79,7 +79,7 @@
 //                 </div>
 //                 <div className="flex items-center gap-2">
 //                   <Button
-//                     onClick={() => removeItem(item.id)}
+//                     onClick={() => decreaseItem(item.id)}
 //                     variant={"outline"}
 //                   >
 //                     -
@@ -119,7 +119,10 @@
 //   );
 // }
 
+"use client";
+
 import * as React from "react";
+
 import { PlusIcon, MinusIcon, Trash2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -134,67 +137,96 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { Badge } from "@/components/ui/badge";
-const people = [
-  {
-    username: "shadcn",
-    avatar: "https://github.com/shadcn.png",
-    email: "shadcn@vercel.com",
-  },
-  {
-    username: "maxleiter",
-    avatar: "https://github.com/maxleiter.png",
-    email: "maxleiter@vercel.com",
-  },
-  {
-    username: "evilrabbit",
-    avatar: "https://github.com/evilrabbit.png",
-    email: "evilrabbit@vercel.com",
-  },
-];
+import { useCartStore } from "@/store/cart-store";
+import toast from "react-hot-toast";
+import { toastCRUD } from "@/lib/utils";
 
 export default function CartCheckout() {
+  const { items, decreaseItem, addItem, clearCart, removeItem } =
+    useCartStore();
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+
+  const total = items.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
+
+  if (total === 0 || items.length === 0) {
+    return (
+      <div>
+        <h1>Your Cart is Empty.</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="flex w-full justify-center items-center  flex-col gap-6 m-auto">
       <ItemGroup className="min-w-sx  md:min-w-2xl">
-        {people.map((person, index) => (
-          <React.Fragment key={person.username}>
+        {items.map((item, index) => (
+          <React.Fragment key={item.id}>
             <Item>
               <ItemMedia
                 variant={"image"}
                 className="h-14 w-14 flex items-center justify-center"
               >
                 <Avatar className="h-14 w-14 rounded-lg">
-                  <AvatarImage src={person.avatar} className="grayscale" />
-                  <AvatarFallback>{person.username.charAt(0)}</AvatarFallback>
+                  <AvatarImage
+                    src={item.image ? item.image : "/image.png"}
+                    className="grayscale"
+                  />
+                  <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </ItemMedia>
               <ItemContent className="gap-1">
-                <ItemTitle>{person.username}</ItemTitle>
-                <ItemDescription>{person.email}</ItemDescription>
+                <ItemTitle>{item.name}</ItemTitle>
+                <ItemDescription>${item.price}</ItemDescription>
               </ItemContent>
               <ItemActions>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button
+                  onClick={() => decreaseItem(item.id)}
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                >
                   <MinusIcon />
                 </Button>
-                <Badge variant="secondary">20</Badge>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Badge variant="secondary">{item.quantity}</Badge>
+                <Button
+                  onClick={() => {
+                    // toast.success("Nice choice 👏 Added to cart", {
+                    //   icon: "🛒",
+                    // });
+                    addItem({ ...item, quantity: 1 });
+                  }}
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                >
                   <PlusIcon />
                 </Button>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button
+                  onClick={() => {
+                    removeItem(item.id);
+                    toastCRUD.delete();
+                  }}
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                >
                   <Trash2Icon />
                 </Button>
               </ItemActions>
             </Item>
-            {index !== people.length - 1 && <ItemSeparator />}
+            {index !== items.length - 1 && <ItemSeparator />}
           </React.Fragment>
         ))}
       </ItemGroup>
       <div className="flex items-center justify-end min-w-sx  md:min-w-2xl">
         <Badge className="rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
-          26 item/s
+          {cartCount} item/s
         </Badge>
         <Badge className="mx-2 rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
-          TOTAL: $59.67
+          TOTAL: ${total}
         </Badge>
         <Button
           variant="destructive"
