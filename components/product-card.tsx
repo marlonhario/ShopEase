@@ -14,7 +14,7 @@ import { HeartIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 
-import { cn } from "@/lib/utils";
+import { cn, toastCRUD } from "@/lib/utils";
 import { useState } from "react";
 import { useCartStore } from "@/store/cart-store";
 
@@ -42,6 +42,8 @@ export const ProductCard = ({ product }: Props) => {
       image: product.image,
       quantity: 1,
     });
+
+    toastCRUD.create();
   };
 
   return (
