@@ -11,7 +11,7 @@ import { useCartStore } from "@/store/cart-store";
 import { useEffect, useState } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { Button } from "./ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 
 const paths = [
@@ -21,6 +21,7 @@ const paths = [
 ];
 
 export const Navbar = () => {
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const { items } = useCartStore();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
@@ -74,7 +75,7 @@ export const Navbar = () => {
           })}
 
           {/* Cart */}
-          <Button variant="ghost" className="relative p-2">
+          <Button onClick={() => router.push("/checkout")} variant="ghost" className="relative p-2">
             <ShoppingCart className="w-6 h-6 text-gray-700" />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
@@ -87,7 +88,11 @@ export const Navbar = () => {
         <div className="md:hidden">
           {/* Cart */}
           {!mobileMenuOpen && (
-            <Button variant="ghost" className="relative p-2 mr-3">
+            <Button
+              onClick={() => router.push("/checkout")}
+              variant="ghost"
+              className="relative p-2 mr-3"
+            >
               <ShoppingCart className="w-6 h-6 text-gray-700" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
@@ -141,7 +146,10 @@ export const Navbar = () => {
             <Button
               variant="ghost"
               className="relative p-2 w-fit"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                router.push("/checkout");
+              }}
             >
               <ShoppingCart className="w-6 h-6 text-gray-700" />
               {cartCount > 0 && (
