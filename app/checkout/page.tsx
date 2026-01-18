@@ -226,7 +226,7 @@ export default function CartCheckout() {
           {cartCount} item/s
         </Badge>
         <Badge className="mx-2 rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
-          TOTAL: ${total}
+          TOTAL: ${total.toFixed(2)}
         </Badge>
         <Button
           variant="destructive"
