@@ -1,11 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import toast from "react-hot-toast";
 
 export interface CartItem {
   id: string;
   name: string;
-  price: number | string;
+  price: number;
   image: string | null;
   quantity: number;
 }
@@ -27,9 +26,6 @@ export const useCartStore = create<CartStore>()(
           const existing = state.items.find((i) => i.id === item.id);
 
           if (existing) {
-            // toast("Good Job!", {
-            //   icon: "🛒",
-            // });
 
             return {
               items: state.items.map((i) =>
@@ -39,10 +35,6 @@ export const useCartStore = create<CartStore>()(
               ),
             };
           }
-
-          // toast("Good Job!", {
-          //   icon: "🛒",
-          // });
 
           return { items: [...state.items, item] };
         }),

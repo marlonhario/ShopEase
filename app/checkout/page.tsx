@@ -18,10 +18,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/store/cart-store";
 import { toastCRUD } from "@/lib/utils";
+import { checkoutStripe } from "./checkout-stripe";
 
 export default function CartCheckout() {
-  const { items, decreaseItem, addItem, removeItem } =
-    useCartStore();
+  const { items, decreaseItem, addItem, removeItem } = useCartStore();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   const total = items.reduce(
@@ -68,9 +68,6 @@ export default function CartCheckout() {
                 <Badge variant="secondary">{item.quantity}</Badge>
                 <Button
                   onClick={() => {
-                    // toast.success("Nice choice 👏 Added to cart", {
-                    //   icon: "🛒",
-                    // });
                     addItem({ ...item, quantity: 1 });
                   }}
                   variant="ghost"
@@ -103,12 +100,15 @@ export default function CartCheckout() {
         <Badge className="mx-2 rounded-sm border-transparent bg-gradient-to-r from-indigo-500 to-pink-500 [background-size:105%] bg-center text-white">
           TOTAL: ${total.toFixed(2)}
         </Badge>
-        <Button
-          variant="destructive"
-          className="h-7 px-2 py-1 text-xs ring-offset-background hover:ring-red-600/90 transition-all duration-300 hover:ring-2 hover:ring-offset-2"
-        >
-          Place Order
-        </Button>
+        <form action={checkoutStripe}>
+          <input type="hidden" name="items" value={JSON.stringify(items)} />
+          <Button
+            variant="destructive"
+            className="h-7 px-2 py-1 text-xs ring-offset-background hover:ring-red-600/90 transition-all duration-300 hover:ring-2 hover:ring-offset-2"
+          >
+            Proceed to Payment
+          </Button>
+        </form>
       </div>
     </div>
   );

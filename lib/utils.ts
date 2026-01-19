@@ -10,8 +10,6 @@ export const toastCRUD = {
   create: (msg = "Item added 👏") =>
     toast.success(msg, {
       style: {
-        // background: "#020617",
-        // color: "#fff",
         border: "1px solid #22c55e",
         borderRadius: "12px",
       },
@@ -30,8 +28,6 @@ export const toastCRUD = {
   update: (msg = "Item updated ✏️") =>
     toast(msg, {
       style: {
-        // background: "#020617",
-        // color: "#fff",
         border: "1px solid #f59e0b",
         borderRadius: "12px",
       },
@@ -40,8 +36,6 @@ export const toastCRUD = {
   delete: (msg = "Item removed ❌") =>
     toast.error(msg, {
       style: {
-        // background: "#020617",
-        // color: "#fff",
         border: "1px solid #ef4444",
         borderRadius: "12px",
       },

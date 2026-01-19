@@ -1,23 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { ProductCard } from "./product-card";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { CardContent } from "./ui/card";
 import Stripe from "stripe";
-
-interface Props {
-  products: {
-    id: number;
-    name: string;
-    image: string;
-    price: number;
-    size: string;
-    color: string;
-    description: string;
-  }[];
-}
 
 interface Products {
   products: Stripe.Product[];

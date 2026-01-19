@@ -22,7 +22,7 @@ export default function ProductDetail({ product }: Product) {
   const { addItem } = useCartStore();
   const price = product.default_price as Stripe.Price;
   const priceAmount =
-    price && price.unit_amount ? (price.unit_amount / 100).toFixed(2) : "0";
+    price && price.unit_amount ? Number((price.unit_amount / 100).toFixed(2)) : 0;
   const image = product.images && product.images[0] ? product.images[0] : "";
 
   const onAddItem = () => {
@@ -48,7 +48,7 @@ export default function ProductDetail({ product }: Product) {
           className="h-14 w-14 size-full rounded-l-xl"
         />
       </CardContent>
-      <div className="sm:min-w-100 justify-center flex flex-col">
+      <div className="sm:min-w-54 lg:min-w-100  justify-center flex flex-col">
         <CardHeader className="pt-6">
           <CardTitle>Dreamy Colorwave Gradient</CardTitle>
           <CardDescription>

@@ -28,7 +28,7 @@ export const ProductCard = ({ product }: Product) => {
   const { addItem } = useCartStore();
   const price = product.default_price as Stripe.Price;
   const priceAmount =
-    price && price.unit_amount ? (price.unit_amount / 100).toFixed(2) : "0";
+    price && price.unit_amount ? Number((price.unit_amount / 100).toFixed(2)) : 0;
   const image = product.images && product.images[0] ? product.images[0] : "";
   const size = product.metadata && product.metadata.size ? product.metadata.size : "";
   const color = product.metadata && product.metadata.color ? product.metadata.color : "";
@@ -73,7 +73,6 @@ export const ProductCard = ({ product }: Product) => {
         <CardHeader>
           <Link
             href={`/products/${product.id}`}
-            // href=""
             className="cursor-pointer hover:text-indigo-600"
           >
             <CardTitle>{product.name}</CardTitle>
