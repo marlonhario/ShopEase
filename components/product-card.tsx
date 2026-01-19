@@ -72,8 +72,8 @@ export const ProductCard = ({ product }: Product) => {
       <Card className="border-none">
         <CardHeader>
           <Link
-            // href={`/products/${product.id}`}
-            href=""
+            href={`/products/${product.id}`}
+            // href=""
             className="cursor-pointer hover:text-indigo-600"
           >
             <CardTitle>{product.name}</CardTitle>
