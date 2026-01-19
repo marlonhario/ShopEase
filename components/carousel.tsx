@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import Link from "next/link";
+import Stripe from "stripe";
 
 interface Props {
   products: {
@@ -21,7 +22,12 @@ interface Props {
   }[];
 }
 
-export const Carousel = ({ products }: Props) => {
+interface Products {
+  products: Stripe.Product[];
+}
+
+// export const Carousel = ({ products }: Props) => {
+export const Carousel = ({ products }: Products) => {
   const [current, setCurrent] = useState<number>(0);
 
   useEffect(() => {
@@ -33,8 +39,8 @@ export const Carousel = ({ products }: Props) => {
   }, [products.length]);
 
   const currentProduct = products[current];
-  const price = currentProduct.price;
-  const image = currentProduct.image;
+  // const price = currentProduct.price;
+  const price = currentProduct.default_price as Stripe.Price;
 
   return (
     <section className="py-12 bg-gray-50">
@@ -53,7 +59,7 @@ export const Carousel = ({ products }: Props) => {
               <div className="rounded-xl shadow-lg overflow-hidden flex flex-col items-center p-4">
                 <div className="relative w-full h-64 sm:h-80 mb-4">
                   <Image
-                    src={slide.image}
+                    src={slide.images[0] ? slide.images[0] : ""}
                     alt={slide.name}
                     fill
                     priority
@@ -62,9 +68,11 @@ export const Carousel = ({ products }: Props) => {
                 </div>
                 <h3 className="flex flex-col items-center text-xl font-bold text-gray-600 mb-2">
                   <span>{slide.name}</span>
-                  <span className="text-[16px] text-gray-800/50">
+                  {/* <span className="text-[16px] text-gray-800/50">
                     {slide.description}
-                  </span>
+                  </span> */}
+                  
+                  {price && price.unit_amount && (<span className="text-[16px] text-gray-800/50">${(price.unit_amount / 100).toFixed(2)}</span>)}
                 </h3>
                 <Link href="/products">
                   <Button className="bg-indigo-600 text-white hover:bg-indigo-700">
@@ -79,25 +87,25 @@ export const Carousel = ({ products }: Props) => {
     </section>
   );
 
-  return (
-    <Card className="relative overflow-hidden rounded-lg shadow-md border-gray-300">
-      {currentProduct.image && (
-        <div className="relative h-80 w-full">
-          <Image
-            alt={currentProduct.name}
-            src={image}
-            layout="fill"
-            objectFit="cover"
-            className="transition-opacity duration-500 ease-in-out"
-          />
-        </div>
-      )}
-      <CardContent className="absolute inset-0 flex flex-col items-center justify-center">
-        <CardTitle className="text-3xl font-bold text-white mb-2">
-          {currentProduct.name}
-        </CardTitle>
-        {price && <p className="text-xl text-white"> {price.toFixed(2)}</p>}
-      </CardContent>
-    </Card>
-  );
+  // return (
+  //   <Card className="relative overflow-hidden rounded-lg shadow-md border-gray-300">
+  //     {currentProduct.image && (
+  //       <div className="relative h-80 w-full">
+  //         <Image
+  //           alt={currentProduct.name}
+  //           src={image}
+  //           layout="fill"
+  //           objectFit="cover"
+  //           className="transition-opacity duration-500 ease-in-out"
+  //         />
+  //       </div>
+  //     )}
+  //     <CardContent className="absolute inset-0 flex flex-col items-center justify-center">
+  //       <CardTitle className="text-3xl font-bold text-white mb-2">
+  //         {currentProduct.name}
+  //       </CardTitle>
+  //       {price && <p className="text-xl text-white"> {price.toFixed(2)}</p>}
+  //     </CardContent>
+  //   </Card>
+  // );
 };

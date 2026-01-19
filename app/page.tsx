@@ -1,9 +1,10 @@
 import { Carousel } from "@/components/carousel";
 import { Button } from "@/components/ui/button";
+import { stripe } from "@/lib/stripe";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
   const products = [
     {
       name: "Melissa Hello Kitty Platform Sneakers - BR39",
@@ -43,6 +44,14 @@ export default function Home() {
     },
   ];
 
+  const stripeProducts = await stripe.products.list({
+    expand: ["data.default_price"],
+    limit: 5,
+  });
+
+  console.log({stripeProducts});
+  
+
   return (
     <>
       <section className="mt-2 relative bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white h-screen">
@@ -80,48 +89,48 @@ export default function Home() {
             />
           </div>
         </div>
-        <Carousel products={products} />
+        <Carousel products={stripeProducts.data} />
       </section>
     </>
   );
 
-  return (
-    <div>
-      <section className="rounded bg-neutral-100 py-8 sm:py-12">
-        <div className="mx-auto flex items-center justify-items-center gap-8 px-8 sm:px-16">
-          <div className="max-w-md space-x-4">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Everything You Need, Just a Click Away
-            </h2>
-            <p className="text-neutral-600">
-              Browse, shop, and enjoy your favorite products without the hassle.
-              Shopping made simple and fun for everyone!
-            </p>
-            <Button
-              asChild
-              variant="default"
-              className="inline-flex items-center justify-center rounded-full px-6 py-3 bg-black text-white"
-            >
-              <Link
-                href="/products"
-                className="inline-flex justify-center items-center rounded-full px-6 py-3"
-              >
-                Shop Now
-              </Link>
-            </Button>
-          </div>
-          <Image
-            alt="Banner Image"
-            width={450}
-            height={450}
-            src="/product_1.png"
-            className="rounded"
-          />
-        </div>
-      </section>
-      <section className="py-8">
-        <Carousel products={products} />
-      </section>
-    </div>
-  );
+  // return (
+  //   <div>
+  //     <section className="rounded bg-neutral-100 py-8 sm:py-12">
+  //       <div className="mx-auto flex items-center justify-items-center gap-8 px-8 sm:px-16">
+  //         <div className="max-w-md space-x-4">
+  //           <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+  //             Everything You Need, Just a Click Away
+  //           </h2>
+  //           <p className="text-neutral-600">
+  //             Browse, shop, and enjoy your favorite products without the hassle.
+  //             Shopping made simple and fun for everyone!
+  //           </p>
+  //           <Button
+  //             asChild
+  //             variant="default"
+  //             className="inline-flex items-center justify-center rounded-full px-6 py-3 bg-black text-white"
+  //           >
+  //             <Link
+  //               href="/products"
+  //               className="inline-flex justify-center items-center rounded-full px-6 py-3"
+  //             >
+  //               Shop Now
+  //             </Link>
+  //           </Button>
+  //         </div>
+  //         <Image
+  //           alt="Banner Image"
+  //           width={450}
+  //           height={450}
+  //           src="/product_1.png"
+  //           className="rounded"
+  //         />
+  //       </div>
+  //     </section>
+  //     <section className="py-8">
+  //       <Carousel products={products} />
+  //     </section>
+  //   </div>
+  // );
 }

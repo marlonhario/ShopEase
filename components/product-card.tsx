@@ -73,7 +73,8 @@ export const ProductCard = ({ product }: Props) => {
       <Card className="border-none">
         <CardHeader>
           <Link
-            href={`/products/${product.id}`}
+            // href={`/products/${product.id}`}
+            href=""
             className="cursor-pointer hover:text-indigo-600"
           >
             <CardTitle>{product.name}</CardTitle>
