@@ -17,29 +17,28 @@ import { Badge } from "@/components/ui/badge";
 import { cn, toastCRUD } from "@/lib/utils";
 import { useState } from "react";
 import { useCartStore } from "@/store/cart-store";
+import Stripe from "stripe";
 
-interface Props {
-  product: {
-    id: number;
-    name: string;
-    image: string;
-    price: number;
-    size: string;
-    color: string;
-    description: string;
-  };
+interface Product {
+  product: Stripe.Product;
 }
 
-export const ProductCard = ({ product }: Props) => {
+export const ProductCard = ({ product }: Product) => {
   const [liked, setLiked] = useState<boolean>(false);
-  const { items, addItem, decreaseItem } = useCartStore();
+  const { addItem } = useCartStore();
+  const price = product.default_price as Stripe.Price;
+  const priceAmount =
+    price && price.unit_amount ? (price.unit_amount / 100).toFixed(2) : "0";
+  const image = product.images && product.images[0] ? product.images[0] : "";
+  const size = product.metadata && product.metadata.size ? product.metadata.size : "";
+  const color = product.metadata && product.metadata.color ? product.metadata.color : "";
 
   const onAddItem = () => {
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
-      image: product.image,
+      price: priceAmount,
+      image: image,
       quantity: 1,
     });
 
@@ -51,7 +50,7 @@ export const ProductCard = ({ product }: Props) => {
       <div className="flex h-60 items-center justify-center">
         <Image
           alt={product.name}
-          src={product.image}
+          src={image}
           priority
           height={300}
           width={300}
@@ -65,7 +64,7 @@ export const ProductCard = ({ product }: Props) => {
       >
         <HeartIcon
           className={cn(
-            liked ? "fill-destructive stroke-destructive" : "stroke-white"
+            liked ? "fill-destructive stroke-destructive" : "stroke-white",
           )}
         />
         <span className="sr-only">Like</span>
@@ -80,12 +79,12 @@ export const ProductCard = ({ product }: Props) => {
             <CardTitle>{product.name}</CardTitle>
           </Link>
           <CardDescription className="flex items-center gap-2">
-            <Badge variant="outline" className="rounded-sm">
-              {product.size}
-            </Badge>
-            <Badge variant="outline" className="rounded-sm">
-              {product.color}
-            </Badge>
+            {size && <Badge variant="outline" className="rounded-sm">
+              {size}
+            </Badge>}
+            {color && <Badge variant="outline" className="rounded-sm">
+              {color}
+            </Badge>}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,7 +93,7 @@ export const ProductCard = ({ product }: Props) => {
         <CardFooter className="justify-between gap-3 max-sm:flex-col max-sm:items-stretch">
           <div className="flex flex-col">
             <span className="text-sm font-medium uppercase">Price</span>
-            <span className="text-xl font-semibold">${product.price}</span>
+            <span className="text-xl font-semibold">${priceAmount}</span>
           </div>
           <Button
             onClick={onAddItem}
@@ -107,39 +106,5 @@ export const ProductCard = ({ product }: Props) => {
         </CardFooter>
       </Card>
     </div>
-  );
-
-  return (
-    <Link href={`/products/${product.id}`} className="block h-full">
-      <Card className="group hover:shadow-2xl transition duration-300 py-0 h-full flex flex-col border-gray-300 gap-0">
-        {product.image && (
-          <div className="relative h-60 w-full">
-            <Image
-              alt={product.name}
-              src={product.image}
-              layout="fill"
-              objectFit="cover"
-              className="group-hover:opacity-90 transition-opacity duration-300 rounded-t-lg"
-            />
-          </div>
-        )}
-        <CardHeader className="p-4">
-          <CardTitle className="text-xl font-bold text-gray-800">
-            {product.name}
-          </CardTitle>
-          <CardContent className="p-4 flex-grow flex flex-col justify-between">
-            {product.description && (
-              <p className="text-gray-600 text-sm mb-2">
-                {product.description}
-              </p>
-            )}
-            {product.price && (
-              <p className="text-xl"> ${product.price.toFixed(2)}</p>
-            )}
-            <Button>View Details</Button>
-          </CardContent>
-        </CardHeader>
-      </Card>
-    </Link>
   );
 };

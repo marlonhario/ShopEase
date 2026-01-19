@@ -39,7 +39,6 @@ export const Carousel = ({ products }: Products) => {
   }, [products.length]);
 
   const currentProduct = products[current];
-  // const price = currentProduct.price;
   const price = currentProduct.default_price as Stripe.Price;
 
   return (

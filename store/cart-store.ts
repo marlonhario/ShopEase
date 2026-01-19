@@ -3,9 +3,9 @@ import { persist } from "zustand/middleware";
 import toast from "react-hot-toast";
 
 export interface CartItem {
-  id: number;
+  id: string;
   name: string;
-  price: number;
+  price: number | string;
   image: string | null;
   quantity: number;
 }
@@ -13,8 +13,8 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  decreaseItem: (id: number) => void;
-  removeItem: (id: number) => void;
+  decreaseItem: (id: string) => void;
+  removeItem: (id: string) => void;
   clearCart: () => void;
 }
 

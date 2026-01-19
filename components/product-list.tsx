@@ -5,6 +5,7 @@ import { ProductCard } from "./product-card";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { CardContent } from "./ui/card";
+import Stripe from "stripe";
 
 interface Props {
   products: {
@@ -18,7 +19,11 @@ interface Props {
   }[];
 }
 
-export const ProductList = ({ products }: Props) => {
+interface Products {
+  products: Stripe.Product[];
+}
+
+export const ProductList = ({ products }: Products) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const filteredProduct = products.filter((product) => {
