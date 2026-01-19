@@ -104,7 +104,7 @@ export default function CartCheckout() {
           <input type="hidden" name="items" value={JSON.stringify(items)} />
           <Button
             variant="destructive"
-            className="h-7 px-2 py-1 text-xs ring-offset-background hover:ring-red-600/90 transition-all duration-300 hover:ring-2 hover:ring-offset-2"
+            className="ring-offset-background hover:ring-red-600/90 transition-all duration-300 hover:ring-2 hover:ring-offset-2"
           >
             Proceed to Payment
           </Button>
