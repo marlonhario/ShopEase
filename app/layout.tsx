@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ecommerce",
-  description: "Ecommerce",
+  description: "ShopEase – browse and buy top shoes and streetwear styles with fast, easy shopping. Discover your favorites and shop now for the best deals online!",
 };
 
 export default function RootLayout({
