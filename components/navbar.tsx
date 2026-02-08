@@ -1,13 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ShoppingCartIcon,
-  Bars3Icon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import { useCartStore } from "@/store/cart-store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { Button } from "./ui/button";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,22 +16,8 @@ const paths = [
 
 export const Navbar = () => {
   const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const { items } = useCartStore();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setMobileOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
